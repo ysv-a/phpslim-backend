@@ -32,7 +32,7 @@ $app->get('/', function (Request $request, Response $response, $args) {
     return $response;
 });
 
-$app->get('/users', function ($request, $response, $args) {
+$app->get('/users', function (Request $request, Response $response, $args) {
     // GET Query params
     // $query_params = $request->getQueryParams();
     // dump($query_params);
@@ -51,11 +51,11 @@ $app->get('/users', function ($request, $response, $args) {
     ]);
 });
 
-$app->get('/users-by-header', function ($request, $response, $args) {
+$app->get('/users-by-header', function (Request $request, Response $response, $args) {
     return $response->withStatus(404);
 });
 
-$app->get('/users/{id}', function ($request, $response, $args) {
+$app->get('/users/{id}', function (Request $request, Response $response, $args) {
     $id = $args['id'];
 
     $db = $this->get('db');
@@ -71,7 +71,7 @@ $app->get('/users/{id}', function ($request, $response, $args) {
     ]);
 });
 
-$app->post('/users', function ($request, $response, $args) {
+$app->post('/users', function (Request $request, Response $response, $args) {
     $db = $this->get('db');
     $parsedBody = $request->getParsedBody();
     // получаем тело запроса
@@ -81,7 +81,7 @@ $app->post('/users', function ($request, $response, $args) {
     // $sth->execute([$first_name, $last_name, $email]);
 });
 
-$app->patch('/users/{id}', function ($request, $response, $args) {
+$app->patch('/users/{id}', function (Request $request, Response $response, $args) {
     $id = $args['id'];
     $db = $this->get('db');
 
@@ -89,7 +89,7 @@ $app->patch('/users/{id}', function ($request, $response, $args) {
     //$sth->execute([$first_name, $last_name, $email, $id]);
 });
 
-$app->put('/users/{id}', function ($request, $response, $args) {
+$app->put('/users/{id}', function (Request $request, Response $response, $args) {
     $id = $args['id'];
     $db = $this->get('db');
     $parsedBody = $request->getParsedBody();
@@ -97,7 +97,7 @@ $app->put('/users/{id}', function ($request, $response, $args) {
     die;
 });
 
-$app->delete('/users/{id}', function ($request, $response, $args) {
+$app->delete('/users/{id}', function (Request $request, Response $response, $args) {
     $id = $args['id'];
     $db = $this->get('db');
 });
