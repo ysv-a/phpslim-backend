@@ -1,11 +1,12 @@
 <?php
 
 use DI\Container;
+use Slim\Views\Twig;
+use Slim\Factory\AppFactory;
+use Slim\Views\TwigMiddleware;
+use Slim\Middleware\MethodOverrideMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Slim\Factory\AppFactory;
-use Slim\Views\Twig;
-use Slim\Views\TwigMiddleware;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -32,7 +33,6 @@ $app->get('/', function (Request $request, Response $response, $args) {
 });
 
 $app->get('/users', function ($request, $response, $args) {
-
     // GET Query params
     // $query_params = $request->getQueryParams();
     // dump($query_params);
@@ -49,11 +49,10 @@ $app->get('/users', function ($request, $response, $args) {
     return $view->render($response, 'users.html', [
         'users' => $users
     ]);
-
 });
 
 $app->get('/users-by-header', function ($request, $response, $args) {
-
+    return $response->withStatus(404);
 });
 
 $app->get('/users/{id}', function ($request, $response, $args) {
@@ -74,13 +73,12 @@ $app->get('/users/{id}', function ($request, $response, $args) {
 
 $app->post('/users', function ($request, $response, $args) {
     $db = $this->get('db');
-
+    $parsedBody = $request->getParsedBody();
+    // получаем тело запроса
+    // dump($parsedBody);
+    // die;
     // $sth = $db->prepare("INSERT INTO users (first_name, last_name, email) VALUES (?,?,?)");
     // $sth->execute([$first_name, $last_name, $email]);
-
-    // $id = $db->lastInsertId();
-    // redirect to user/{new_id}
-
 });
 
 $app->patch('/users/{id}', function ($request, $response, $args) {
@@ -89,10 +87,23 @@ $app->patch('/users/{id}', function ($request, $response, $args) {
 
     //$sth = $db->prepare("UPDATE users SET first_name=?, last_name=?, email=? WHERE id=?");
     //$sth->execute([$first_name, $last_name, $email, $id]);
-
 });
 
+$app->put('/users/{id}', function ($request, $response, $args) {
+    $id = $args['id'];
+    $db = $this->get('db');
+    $parsedBody = $request->getParsedBody();
+    dump($parsedBody);
+    die;
+});
 
+$app->delete('/users/{id}', function ($request, $response, $args) {
+    $id = $args['id'];
+    $db = $this->get('db');
+});
+
+$methodOverrideMiddleware = new MethodOverrideMiddleware();
+$app->add($methodOverrideMiddleware);
 
 $app->add(TwigMiddleware::create($app, $twig));
 $app->run();
